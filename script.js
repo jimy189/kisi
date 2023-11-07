@@ -4,6 +4,7 @@
 const movieSearchBox = document.getElementById('movie-search-box');
 const searchList = document.getElementById('search-list');
 const resultGrid = document.getElementById('result-grid');
+const resultFavorito= document.getElementById('result-favorito');
 
 // load movies from API
 async function loadMovies(searchTerm){
@@ -72,18 +73,29 @@ function displayMovieDetails(details){
     <div class = "movie-info">
         <h3 class = "movie-title">${details.Title}</h3>
         <ul class = "movie-misc-info">
-            <li class = "year">Year: ${details.Year}</li>
-            <li class = "rated">Ratings: ${details.Rated}</li>
-            <li class = "released">Released: ${details.Released}</li>
+            <li class = "year">Ano: ${details.Year}</li>
+            <li class = "released"> Diretor: ${details.Director}</li>
         </ul>
-        <p class = "genre"><b>Genre:</b> ${details.Genre}</p>
-        <p class = "writer"><b>Writer:</b> ${details.Writer}</p>
-        <p class = "actors"><b>Actors: </b>${details.Actors}</p>
+        <p class = "genre"><b>Genêro:</b> ${details.Genre}</p>
+        <p class = "writer"><b>Escritor:</b> ${details.Writer}</p>
+        <p class = "actors"><b>Ator: </b>${details.Actors}</p>
         <p class = "plot"><b>Plot:</b> ${details.Plot}</p>
-        <p class = "language"><b>Language:</b> ${details.Language}</p>
+        <p class = "language"><b>Linguagem:</b> ${details.Language}</p>
         <p class = "awards"><b><i class = "fas fa-award"></i></b> ${details.Awards}</p>
+        <button class="btn btn-primary" id="addtButton">Adicionar</button>
+        <button class="btn btn-primary" id="editButton"><a class="btn btn-primary" href="editar.html">Editar</a></button>
+        <button class="btn btn-danger" id="deleteButton">Deletar</button>
+        <td>
+        
+    </td>
     </div>
     `;
+
+      // Adicione um evento de clique ao botão "Adicionar"
+      const addButton = document.getElementById('addButton');
+      addButton.addEventListener('click', () => {
+          addFavoriteMovie(details);
+      });
 }
 
 
@@ -92,3 +104,106 @@ window.addEventListener('click', (event) => {
         searchList.classList.add('hide-search-list');
     }
 });
+
+function addFavoriteMovie(movieDetails) {
+    const resultFavorito = document.getElementById('result-favorito');
+
+    // Crie um novo elemento para o filme favorito
+    const favoriteMovie = document.createElement('div');
+    favoriteMovie.classList.add('movie-item');
+
+    // Copie o HTML dos detalhes do filme
+    favoriteMovie.innerHTML = `
+        <div class="movie-poster">
+            <img src="${(movieDetails.Poster != "N/A") ? movieDetails.Poster : "image_not_found.png"}" alt="movie poster">
+        </div>
+        <div class="movie-info">
+            <h3 class="movie-title">${movieDetails.Title}</h3>
+            <ul class="movie-misc-info">
+                <li class="year">Ano: ${movieDetails.Year}</li>
+                <li class="rated">Ratings: ${movieDetails.Rated}</li>
+                <li class="released">Lançado: ${movieDetails.Released}</li>
+            </ul>
+            <p class="genre"><b>Genêro:</b> ${movieDetails.Genre}</p>
+            <p class="writer"><b>Escritor:</b> ${movieDetails.Writer}</p>
+            <p class="actors"><b>Ator: </b>${movieDetails.Actors}</p>
+            <p class="plot"><b>Plot:</b> ${movieDetails.Plot}</p>
+            <p class="language"><b>Linguagem:</b> ${movieDetails.Language}</p>
+            <p class="awards"><b><i class="fas fa-award"></i></b> ${movieDetails.Awards}</p>
+        </div>
+    `;
+
+    // Adicione o filme favorito à seção de favoritos
+    resultFavorito.appendChild(favoriteMovie);
+}
+
+
+ const addtButton = document.getElementById('addButton');
+ const editButton = document.getElementById('editButton');
+ const deleteButton = document.getElementById('deleteButton');
+
+ editButton.addEventListener('click', function () {
+    // Lógica para editar o filme
+    // Aqui você pode fazer uma solicitação post para a API para adcionar o filme
+    const editedMovieData = {
+        title: movieData.Title,
+        year: movieData.Year,
+        director: movieData.Director,
+    };
+
+    fetch(`/sua/api/create?idFilme=ID_DO_FILME`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedMovieData),
+    })
+    .then((response) => {
+        if (response.status === 200) {
+            console.log("Editado com sucesso!")
+        } else {
+           console.log("Erro")
+        }
+    });
+});
+
+ editButton.addEventListener('click', function () {
+     // Lógica para editar o filme
+     // Aqui você pode fazer uma solicitação PUT para a API para editar o filme
+     const editedMovieData = {
+         title: movieData.Title,
+         year: movieData.Year,
+         director: movieData.Director,
+     };
+
+     fetch(`/sua/api/editar?idFilme=ID_DO_FILME`, {
+         method: 'PUT',
+         headers: {
+             'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(editedMovieData),
+     })
+     .then((response) => {
+         if (response.status === 200) {
+             console.log("Editado com sucesso!")
+         } else {
+            console.log("Erro")
+         }
+     });
+ });
+
+ deleteButton.addEventListener('click', function () {
+     // Lógica para deletar o filme
+     // Aqui você pode fazer uma solicitação DELETE para a API para deletar o filme
+     fetch(`/sua/api/deletar?idFilme=ID_DO_FILME`, {
+         method: 'DELETE',
+     })
+     .then((response) => {
+         if (response.status === 200) {
+            console.log("Deletado com sucesso!")
+             movieInfoTable.innerHTML = '';
+         } else {
+            console.log("Erro")
+         }
+     });
+ });
