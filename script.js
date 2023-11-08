@@ -82,9 +82,10 @@ function displayMovieDetails(details){
         <p class = "plot"><b>Plot:</b> ${details.Plot}</p>
         <p class = "language"><b>Linguagem:</b> ${details.Language}</p>
         <p class = "awards"><b><i class = "fas fa-award"></i></b> ${details.Awards}</p>
-        <button class="btn btn-primary" id="addtButton">Adicionar</button>
+        <!-- 
+        <button class="btn btn-primary" id="addtButton" js-btn-add>Adicionar</button>
         <button class="btn btn-primary" id="editButton"><a class="btn btn-primary" href="editar.html">Editar</a></button>
-        <button class="btn btn-danger" id="deleteButton">Deletar</button>
+        <button class="btn btn-danger" id="deleteButton">Deletar</button> -->
         <td>
         
     </td>
@@ -92,9 +93,9 @@ function displayMovieDetails(details){
     `;
 
       // Adicione um evento de clique ao botão "Adicionar"
-      const addButton = document.getElementById('addButton');
+      const addButton = document.querySelector('[js-btn-add]');
       addButton.addEventListener('click', () => {
-          addFavoriteMovie(details);
+        addFavoriteMovie(details);
       });
 }
 
@@ -105,7 +106,7 @@ window.addEventListener('click', (event) => {
     }
 });
 
-function addFavoriteMovie(movieDetails) {
+function addFavoriteMovie(details) {
     const resultFavorito = document.getElementById('result-favorito');
 
     // Crie um novo elemento para o filme favorito
@@ -114,27 +115,47 @@ function addFavoriteMovie(movieDetails) {
 
     // Copie o HTML dos detalhes do filme
     favoriteMovie.innerHTML = `
-        <div class="movie-poster">
-            <img src="${(movieDetails.Poster != "N/A") ? movieDetails.Poster : "image_not_found.png"}" alt="movie poster">
-        </div>
-        <div class="movie-info">
-            <h3 class="movie-title">${movieDetails.Title}</h3>
-            <ul class="movie-misc-info">
-                <li class="year">Ano: ${movieDetails.Year}</li>
-                <li class="rated">Ratings: ${movieDetails.Rated}</li>
-                <li class="released">Lançado: ${movieDetails.Released}</li>
-            </ul>
-            <p class="genre"><b>Genêro:</b> ${movieDetails.Genre}</p>
-            <p class="writer"><b>Escritor:</b> ${movieDetails.Writer}</p>
-            <p class="actors"><b>Ator: </b>${movieDetails.Actors}</p>
-            <p class="plot"><b>Plot:</b> ${movieDetails.Plot}</p>
-            <p class="language"><b>Linguagem:</b> ${movieDetails.Language}</p>
-            <p class="awards"><b><i class="fas fa-award"></i></b> ${movieDetails.Awards}</p>
-        </div>
-    `;
+    <div class = "movie-poster">
+    <img src = "${(details.Poster != "N/A") ? details.Poster : "image_not_found.png"}" alt = "movie poster">
+</div>
+<div class = "movie-info">
+    <h3 class = "movie-title">${details.Title}</h3>
+    <ul class = "movie-misc-info">
+        <li class = "year">Ano: ${details.Year}</li>
+        <li class = "released"> Diretor: ${details.Director}</li>
+    </ul>
+    <p class = "genre"><b>Genêro:</b> ${details.Genre}</p>
+    <p class = "writer"><b>Escritor:</b> ${details.Writer}</p>
+    <p class = "actors"><b>Ator: </b>${details.Actors}</p>
+    <p class = "plot"><b>Plot:</b> ${details.Plot}</p>
+    <p class = "language"><b>Linguagem:</b> ${details.Language}</p>
+    <p class = "awards"><b><i class = "fas fa-award"></i></b> ${details.Awards}</p>
+    <button class="btn btn-primary" id="addtButton" js-btn-add>Adicionar</button>
+    <button class="btn btn-primary" id="editButton"><a class="btn btn-primary" href="editar.html">Editar</a></button>
+    <button class="btn btn-danger" id="deleteButton">Deletar</button>
+    <td>
+    
+</td>
+</div>
+`;
 
     // Adicione o filme favorito à seção de favoritos
     resultFavorito.appendChild(favoriteMovie);
+
+    const objnewmovie = 
+    {
+        "Title": details.Title,
+        "Year": details.Year,
+        "Director" : details.Director
+    }
+
+    fetch(`http://localhost:8080/filme/adicionarFilmes`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objnewmovie),
+    })  
 }
 
 
@@ -142,7 +163,7 @@ function addFavoriteMovie(movieDetails) {
  const editButton = document.getElementById('editButton');
  const deleteButton = document.getElementById('deleteButton');
 
- editButton.addEventListener('click', function () {
+ addtButton.addEventListener('click', function () {
     // Lógica para editar o filme
     // Aqui você pode fazer uma solicitação post para a API para adcionar o filme
     const editedMovieData = {
@@ -151,8 +172,10 @@ function addFavoriteMovie(movieDetails) {
         director: movieData.Director,
     };
 
-    fetch(`/sua/api/create?idFilme=ID_DO_FILME`, {
-        method: 'PUT',
+    debugger
+
+    fetch(`http://localhost:8080/filme/adicionarFilmes`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
