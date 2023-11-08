@@ -46,9 +46,16 @@
                 </div>
             </div>
         </div>
+        <form form-editar method="POST" style="display: none;">	
+            <input type="text" name="titulo" th:value="${filme.getTitulo()}" placeholder="Titulo" class="form-control mb-4 col-4" />
+            <input type="text" name="nomeDireito" th:value="${filme.getNomeDiretor()}" placeholder="Direitor" class="form-control mb-4 col-4" />
+            <input type="text" name="ano" th:value="${filme.getAno()}" placeholder="Ano do Lançamento" class="form-control mb-4 col-4" />
+          
+          <button type="submit" class="btn btn-info col-2">Salvar</button>
+        </form>
+    </div>
 
    
-    </div>
 
 
     

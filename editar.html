@@ -9,20 +9,17 @@
 <body>
     <div class="container my-2">
 		<h2>Editar Filme</h2>
-		<form th:action="@{/editar/{id}(id=${filme.id})}" method="POST">
+		<form form-editar method="POST">
 			
       		<input type="text" name="titulo" th:value="${filme.getTitulo()}" placeholder="Titulo" class="form-control mb-4 col-4" />
       		<input type="text" name="nomeDireito" th:value="${filme.getNomeDiretor()}" placeholder="Direitor" class="form-control mb-4 col-4" />
       		<input type="text" name="ano" th:value="${filme.getAno()}" placeholder="Ano do Lançamento" class="form-control mb-4 col-4" />
 			
-			
-			<textarea type="text" name="descricao" th:text="${filme.descricao}" placeholder="Descrição"  class="form-textarea form-control mb-4 col-4"></textarea>
-			<textarea type="text" name="poster" th:text="${filme.getPoster()}" placeholder="Link da imagem" class="form-textarea form-control mb-4 col-4"></textarea>
-
 			<button type="submit" class="btn btn-info col-2"><a class="btn btn-primary" href="index.html">Salvar</a></button>
 		</form>
 		<hr>
 		
 	</div>
 </body>
+<script src = "script.js"></script>
 </html>
